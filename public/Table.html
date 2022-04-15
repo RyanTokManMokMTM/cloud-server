@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Dynamic Table</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="Table.css" />
+    <!-- Bootstrap 4 CDN -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+
+	    fetch('http://localhost:80/ult',
+		    {
+			credentials: 'include',
+      			method: 'POST',
+			    headers:{
+				'Origin':'*'
+
+			    }})
+  .then(function(response) {
+	 console.log(response.json())
+    return response.json();
+	
+  })
+  .then(function(myJson) {
+    console.log(myJson);
+  });
+	
+        $(document).ready(function(){
+            // Add new row
+            $("#add-row").click(function(){
+                var JOB_id = $("#JOB_id").val();
+                var status = $("#status").val();
+                var result = $("#result").val();
+                $(".table tbody tr").last().after(
+                    '<tr class="fadetext">'+
+                        '<td><input type="checkbox" id="select-row"></td>'+
+                        '<td>'+JOB_id+'</td>'+
+                        '<td>'+status+'</td>'+
+                        '<td>'+result+'</td>'+
+                    '</tr>'
+                );
+            })
+
+            // Select all checkbox
+            $("#select-all").click(function(){
+                var isSelected = $(this).is(":checked");
+                if(isSelected){
+                    $(".table tbody tr").each(function(){
+                        $(this).find('input[type="checkbox"]').prop('checked', true);
+                    })
+                }else{
+                    $(".table tbody tr").each(function(){
+                        $(this).find('input[type="checkbox"]').prop('checked', false);
+                    })
+                }
+            });
+            
+            // Remove selected rows
+            $("#remove-row").click(function(){
+                $(".table tbody tr").each(function(){
+                    var isChecked = $(this).find('input[type="checkbox"]').is(":checked");
+                    var tableSize = $(".table tbody tr").length;
+                    if(tableSize == 1){
+                        alert('All rows cannot be deleted.');
+                    }else if(isChecked){
+                        $(this).remove();
+                    }
+                });
+            });
+
+        })
+    </script>
+</head>
+<body>
+    <div class="container">
+
+        <div class="form-div">
+            <div class="row">
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="JOB_id" placeholder="JOB id">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="status" placeholder="Status">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="result" placeholder="Result">
+                </div>
+                <div class="col-md-3" style="text-align: right;">
+                    <button class="btn btn-primary" id="add-row">Add Job</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>All <input type="checkbox" id="select-all"></th>
+                        <th>JOB id</th>
+                        <th>Status</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="checkbox" id="select-row"></td>
+                        <td>example</td>
+                        <td>example</td>
+                        <td>example</td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="remove-row" id="remove-row">Remove Job</button>
+
+        </div>
+    </div>
+</body>
+</html>

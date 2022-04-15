@@ -1,0 +1,11 @@
+apt-get update &&       apt-get -y install sudo
+
+sudo apt-get update
+sudo apt-get install vim
+sudo apt-get install openssh-server
+sudo apt-get install net-tools
+
+ sudo apt-get install npm
+
+
+sudo apt-get install -y nodejs
